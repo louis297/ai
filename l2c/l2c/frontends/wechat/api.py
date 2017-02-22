@@ -23,7 +23,7 @@ class Frontend:
 
     # wechat login
     def login(self):
-        itchat.auto_login(hotReload=True)
+        itchat.auto_login(hotReload=True, enableCmdQR=True)
 
     def get_friends(self):
         self.friends_info = itchat.get_friends()
