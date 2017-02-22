@@ -53,15 +53,27 @@ def get_response(msg):
         return
 
 
-@itchat.msg_register(itchat.content.TEXT, isGroupChat=True, isFriendChat=True)
+@itchat.msg_register(itchat.content.TEXT, isFriendChat=True)
 def tuling_reply(msg):
     # 为了保证在图灵Key出现问题的时候仍旧可以回复，这里设置一个默认回复
     defaultReply = 'I received: ' + msg['Text'] + '\nThis is only an auto-replay, when something wrong happens.'
     # 如果图灵Key出现问题，那么reply将会是None
+
     reply = get_response(msg['Text'])
     # a or b的意思是，如果a有内容，那么返回a，否则返回b
     # 有内容一般就是指非空或者非None，你可以用`if a: print('True')`来测试
     return reply or defaultReply
+
+
+@itchat.msg_register(itchat.content.TEXT, isGroupChat=True)
+def group_reply(msg):
+    reply = None
+    if msg['isAt']:
+        reply = get_response(msg['Text'])
+        default_reply = 'I received: ' + msg['Text'] + '\nThis is only an auto-replay, when something wrong happens.'
+        return reply or default_reply
+    else:
+        return
 
 # main
 # only for test while developing
