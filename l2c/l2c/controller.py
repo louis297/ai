@@ -25,8 +25,7 @@ def main():
         print(algo.placeholder)
         print(utils.placeholder)
 
-        itchat.run()
-    pass
+    itchat.run()
 
 
 @staticmethod
