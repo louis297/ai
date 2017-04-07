@@ -7,6 +7,8 @@
 import itchat
 import requests
 from settings import settings
+from algorithms.fenke import fenke_api
+import algorithms.utilities
 
 
 turing_bot_key = '05adb65eb0a94b5f9bb6a241f21e2f7c'
@@ -43,12 +45,21 @@ def get_response(msg):
         'userid':   'louis',
     }
     try:
-        r = requests.post(apiUrl, data=data).json()
-        # 字典的get方法在字典没有'text'值的时候会返回None而不会抛出异常
-        return r.get('text')
+        if msg.startswith('.分科'):
+            return fenke_api.fenke_api(msg[3:])
+        elif msg.strip() == '帮助':
+            return algorithms.utilities.help()
+        else:
+            r = requests.post(apiUrl, data=data).json()
+            # 字典的get方法在字典没有'text'值的时候会返回None而不会抛出异常
+            return r.get('text')
+
     # 为了防止服务器没有正常响应导致程序异常退出，这里用try-except捕获了异常
     # 如果服务器没能正常交互（返回非json或无法连接），那么就会进入下面的return
-    except:
+    except Exception as e:
+        if settings.debug:
+            print(e)
+
         # 将会返回一个None
         return
 
@@ -68,10 +79,11 @@ def tuling_reply(msg):
 @itchat.msg_register(itchat.content.TEXT, isGroupChat=True)
 def group_reply(msg):
     reply = None
-    if msg['isAt']:
-        reply = get_response(msg['Text'])
-        default_reply = 'I received: ' + msg['Text'] + '\nThis is only an auto-replay, when something wrong happens.'
-        return reply or default_reply
+    if 'isAt' in msg:
+        if msg['isAt']:
+            reply = get_response(msg['Text'])
+            default_reply = 'I received: ' + msg['Text'] + '\nThis is only an auto-replay, when something wrong happens.'
+            return reply or default_reply
     else:
         return
 

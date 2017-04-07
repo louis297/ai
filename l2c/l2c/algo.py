@@ -1,4 +1,4 @@
-# /usr/bin/python
+#!/usr/bin/python
 
 # core algorithms interface
 # provide interface between main controller and algorithms part

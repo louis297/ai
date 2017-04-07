@@ -6,6 +6,6 @@
 
 
 class Settings:
-    debug = True
+    debug = False
 
 settings = Settings()
