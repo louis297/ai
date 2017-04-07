@@ -79,8 +79,8 @@ def tuling_reply(msg):
 @itchat.msg_register(itchat.content.TEXT, isGroupChat=True)
 def group_reply(msg):
     reply = None
-    if 'isAt' in msg:
-        if msg['isAt']:
+    if 'IsAt' in msg:
+        if msg['IsAt']:
             reply = get_response(msg['Text'])
             default_reply = 'I received: ' + msg['Text'] + '\nThis is only an auto-replay, when something wrong happens.'
             return reply or default_reply
