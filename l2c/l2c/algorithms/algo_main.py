@@ -45,7 +45,7 @@ def get_response(msg):
         'userid':   'louis',
     }
     try:
-        if msg.startswith('.分科'):
+        if msg.startswith('#分科'):
             return fenke_api.fenke_api(msg[3:])
         elif msg.strip() == '帮助':
             return algorithms.utilities.help()
