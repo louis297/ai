@@ -7,7 +7,7 @@
 import itchat
 import requests
 from settings import settings
-from algorithms.fenke import fenke_api
+# from algorithms.fenke import fenke_api
 import algorithms.utilities
 
 
