@@ -45,14 +45,24 @@ def get_response(msg):
         'userid':   'louis',
     }
     try:
-        if msg.startswith('#分科'):
-            return fenke_api.fenke_api(msg[3:])
-        elif msg.strip() == '帮助':
-            return algorithms.utilities.help()
-        else:
-            r = requests.post(apiUrl, data=data).json()
-            # 字典的get方法在字典没有'text'值的时候会返回None而不会抛出异常
-            return r.get('text')
+        # ret = None
+        # if msg.startswith('#分科'):
+        #     ret = fenke_api.fenke_api(msg[3:])
+        # elif msg.strip() == '帮助':
+        #     ret = algorithms.utilities.help()
+        # else:
+        #     r = requests.post(apiUrl, data=data).json()
+        #     # 字典的get方法在字典没有'text'值的时候会返回None而不会抛出异常
+        #     ret = r.get('text')
+        # ret_save = [
+        #     msg,
+        #     ret,
+        # ]
+        # algorithms.utilities.save_message(ret_save)
+        r = requests.post(apiUrl, data=data).json()
+        # 字典的get方法在字典没有'text'值的时候会返回None而不会抛出异常
+        ret = r.get('text')
+        return ret
 
     # 为了防止服务器没有正常响应导致程序异常退出，这里用try-except捕获了异常
     # 如果服务器没能正常交互（返回非json或无法连接），那么就会进入下面的return
