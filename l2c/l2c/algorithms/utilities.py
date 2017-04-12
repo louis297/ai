@@ -5,8 +5,9 @@
 # Louis
 # 04/07/2017
 
-def help():
-    ret = '''#   查询分科信息
+
+def help_message():
+    ret = '''?   查询分科信息
 帮助   查看帮助信息
 其他   AI闲聊模式
           '''

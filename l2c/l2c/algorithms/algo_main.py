@@ -123,10 +123,10 @@ def get_response(msg):
         'userid': 'louis',
     }
     try:
-        if msg['Text'].startswith('#'):
+        if msg['Text'].startswith('?') or msg['Text'].startswith('？'):
             ret = fenke_api.fenke_api(msg['Text'][1:])
         elif msg['Text'].strip() == '帮助':
-            ret = algorithms.utilities.help()
+            ret = algorithms.utilities.help_message()
         else:
             r = requests.post(api_url, data=data).json()
             # 字典的get方法在字典没有'text'值的时候会返回None而不会抛出异常
@@ -159,7 +159,7 @@ def get_response(msg):
 
 def suggestion_hospital(msg):
     user_alias = msg['User']['Alias']
-    if msg['Text'].startswith('#'):
+    if msg['Text'].startswith('?') or msg['Text'].startswith('？'):
         algo.hospital_suggestion_init(msg)
         algo.hospital_suggestion(msg)
         return False
