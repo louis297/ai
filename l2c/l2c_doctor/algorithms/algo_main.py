@@ -102,61 +102,6 @@ class Algorithms:
                 if settings.debug:
                     print(e)
 
-    # def hospital_suggestion(self, msg):
-    #     """
-    #     hospital_suggestion
-    #     """
-    #
-    #     user_alias = msg['User']['Alias']
-    #     if user_alias not in self.suggestion_users:
-    #         self.hospital_suggestion_init(msg)
-    #
-    #     # 是否需要推荐医院
-    #     if self.suggestion_users_info[user_alias]['step'] == 1:
-    #         try:
-    #             threading.Thread(target=send_message_delay,
-    #                              args=(self.suggestion_message[1], msg['User']['UserName'], 1.5),
-    #                              name=user_alias+'1').start()
-    #
-    #             # send_message_delay(self.suggestion_message[1], msg['User']['UserName'], 5)
-    #             self.suggestion_users_info[user_alias]['step'] = 2
-    #         except Exception as e:
-    #             if settings.debug:
-    #                 print(e)
-    #
-    #     # 是否需要挂号
-    #     elif self.suggestion_users_info[user_alias]['step'] == 2:
-    #         try:
-    #             hospitals_list = []
-    #             for i in range(len(self.hospital_list)):
-    #                 hospitals_list.append(str(i+1) + '. ' + self.hospital_list[i] + '\n')
-    #             hospitals = ''.join(hospitals_list)
-    #             send_message_delay(hospitals, msg['User']['UserName'], 0)
-    #             threading.Thread(target=send_message_delay,
-    #                              args=(self.suggestion_message[2], msg['User']['UserName'], 1),
-    #                              name=user_alias+'1').start()
-    #             # send_message_delay(self.suggestion_message[2], msg['User']['UserName'], 2)
-    #
-    #             self.suggestion_users_info[user_alias]['step'] = 3
-    #         except Exception as e:
-    #             if settings.debug:
-    #                 print(e)
-    #
-    #     # 完成挂号
-    #     elif self.suggestion_users_info[user_alias]['step'] == 3:
-    #         try:
-    #             # TODO: call real function to finish registration
-    #             threading.Thread(target=send_message_delay,
-    #                              args=(self.suggestion_message[3], msg['User']['UserName'], 1),
-    #                              name=user_alias+'1').start()
-    #             # send_message_delay(self.suggestion_message[3], msg['User']['UserName'], 2)
-    #
-    #             self.suggestion_users.remove(user_alias)
-    #             del (self.suggestion_users_info[user_alias])
-    #         except Exception as e:
-    #             if settings.debug:
-    #                 print(e)
-
     def suggestion_hospital_cancel(self, msg):
         user_alias = msg['User']['Alias']
         if user_alias in self.suggestion_users:
@@ -201,53 +146,6 @@ def get_response(msg):
         # 将会返回一个None
         return
 
-# @itchat.msg_register(itchat.content.TEXT)
-# def print_content(msg):
-#     if settings.debug:
-#         print(msg)
-#
-#     name = 'Not Found'
-#
-#     for friend in itchat.get_friends():
-#         if friend['UserName'] == msg['FromUserName']:
-#             name = friend['NickName']
-#             break
-#
-#     return name + ', ' + msg['Text']
-
-
-def suggestion_hospital(msg):
-    user_alias = msg['User']['Alias']
-    if msg['Text'].startswith('?') or msg['Text'].startswith('？'):
-        algo.hospital_suggestion_init(msg)
-        algo.hospital_suggestion(msg)
-        return True
-    elif msg['Text'] == '病历':
-        send_message_delay('病历url', msg['User']['UserName'], 0)
-        return False
-    elif user_alias in algo.suggestion_users:
-        if algo.suggestion_users_info[user_alias]['step'] == 2:
-            if msg['Text'].strip() == '1':
-                algo.hospital_suggestion(msg, status='2-1')
-            elif msg['Text'].strip() == '2':
-                algo.hospital_suggestion(msg, status='2-2')
-            else:
-                algo.suggestion_hospital_cancel(msg)
-        # elif algo.suggestion_users_info[user_alias]['step'] == 3:
-        #     try:
-        #         hospital_id = int(msg['Text'])
-        #         if 0 < hospital_id <= len(algo.hospital_list):
-        #             algo.hospital_suggestion(msg)
-        #         else:
-        #             raise ValueError('Hospital ID error.')
-        #
-        #     except Exception as e:
-        #         algo.suggestion_hospital_cancel(msg)
-        #         if e is not ValueError and settings.debug:
-        #             print(e)
-        return True
-
-
 
 @itchat.msg_register(itchat.content.TEXT, isFriendChat=True)
 def tuling_reply(msg):
@@ -255,31 +153,17 @@ def tuling_reply(msg):
     default_reply = 'I received: ' + msg['Text'] + '\nThis is only an auto-replay, when something wrong happens.'
     # 如果图灵Key出现问题，那么reply将会是None
 
-    suggestion = suggestion_hospital(msg)
-    if not suggestion:
-        return
-
-    ############
-    return  # Delete this line to re-connect to turing bot
-
+    if msg['Text'].endswith('病历'):
+        return 'fake_api'
+    elif msg['Text'] == '管理':
+        return '面对面看诊时间管理链接\n网上在线看诊的时间管理链接\n（功能开发中）'
+    return
     reply = get_response(msg)
 
 
     # a or b的意思是，如果a有内容，那么返回a，否则返回b
     # 有内容一般就是指非空或者非None，你可以用`if a: print('True')`来测试
     return reply or default_reply
-
-
-@itchat.msg_register(itchat.content.TEXT, isGroupChat=True)
-def group_reply(msg):
-    reply = None
-    if 'IsAt' in msg:
-        if msg['IsAt']:
-            reply = get_response(msg)
-            default_reply = 'I received: ' + msg['Text'] + '\nThis is only an auto-replay, when something wrong happens.'
-            return reply or default_reply
-    else:
-        return
 
 
 # main

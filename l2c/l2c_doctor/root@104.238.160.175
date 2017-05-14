@@ -98,8 +98,7 @@ def fenke_api(input_words):
             # else:
             # print(mycatelist[0].rjust(4,"　"),"-->",mycatelist[1].rjust(6,"　"),"-->",mycatelist[2].rjust(7,"　"),"：",x[1])
             # print(x.rjust(10,"　"),"：",dict[x])
-        # return "分诊科室：" + thecatename + str(theval)
-        return "分诊科室：" + thecatename
+        return "分诊科室：" + thecatename + str(theval)
     except Exception as e:
         print(repr(e))
 
