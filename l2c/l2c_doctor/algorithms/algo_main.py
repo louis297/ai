@@ -154,7 +154,7 @@ def tuling_reply(msg):
     # 如果图灵Key出现问题，那么reply将会是None
 
     if msg['Text'].endswith('病历'):
-        return 'fake_api'
+        return 'http://sample.zixuncr.com/sample.html'
     elif msg['Text'] == '管理':
         return '面对面看诊时间管理链接\n网上在线看诊的时间管理链接\n（功能开发中）'
     return

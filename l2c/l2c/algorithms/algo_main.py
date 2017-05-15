@@ -187,6 +187,7 @@ def get_response(msg):
         elif msg['Text'].strip() == '帮助':
             ret = algorithms.utilities.help_message()
         else:
+            return
             r = requests.post(api_url, data=data).json()
             # 字典的get方法在字典没有'text'值的时候会返回None而不会抛出异常
             ret = r.get('text')
@@ -223,7 +224,7 @@ def suggestion_hospital(msg):
         algo.hospital_suggestion(msg)
         return True
     elif msg['Text'] == '病历':
-        send_message_delay('病历url', msg['User']['UserName'], 0)
+        send_message_delay('http://sample.zixuncr.com/sample.html', msg['User']['UserName'], 0)
         return False
     elif user_alias in algo.suggestion_users:
         if algo.suggestion_users_info[user_alias]['step'] == 2:
@@ -260,7 +261,7 @@ def tuling_reply(msg):
         return
 
     ############
-    return  # Delete this line to re-connect to turing bot
+    # return  # Delete this line to re-connect to turing bot
 
     reply = get_response(msg)
 
